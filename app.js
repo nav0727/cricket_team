@@ -27,7 +27,7 @@ const initializeDbAndServer = async () => {
 };
 
 initializeDbAndServer();
-
+// convert database to response object
 const convertDbObjectToResponseObject = (dbObject) => {
   return {
     playerId: dbObject.player_id,
@@ -36,6 +36,7 @@ const convertDbObjectToResponseObject = (dbObject) => {
     role: dbObject.role,
   };
 };
+//get all player Details API
 
 app.get("/players/", async (request, response) => {
   const getPlayersQuery = `
@@ -51,6 +52,8 @@ app.get("/players/", async (request, response) => {
   );
 });
 
+//get single player Id Details API
+
 app.get("/players/:playerId/", async (request, response) => {
   const { playerId } = request.params;
   const getPlayerQuery = `
@@ -64,6 +67,9 @@ app.get("/players/:playerId/", async (request, response) => {
   response.send(convertDbObjectToResponseObject(player));
 });
 
+
+// create new Player API
+
 app.post("/players/", async (request, response) => {
   const { playerName, jerseyNumber, role } = request.body;
   const postPlayerQuery = `
@@ -74,6 +80,8 @@ app.post("/players/", async (request, response) => {
   const player = await database.run(postPlayerQuery);
   response.send("Player Added to Team");
 });
+
+//update player API
 
 app.put("/players/:playerId/", async (request, response) => {
   const { playerName, jerseyNumber, role } = request.body;
@@ -91,6 +99,8 @@ app.put("/players/:playerId/", async (request, response) => {
   await database.run(updatePlayerQuery);
   response.send("Player Details Updated");
 });
+
+//Delete player API
 
 app.delete("/players/:playerId/", async (request, response) => {
   const { playerId } = request.params;
